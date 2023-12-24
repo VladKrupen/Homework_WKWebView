@@ -21,23 +21,24 @@ class ViewController: UIViewController, WKNavigationDelegate {
     let safariButtonItem = UIBarButtonItem(image: UIImage(systemName: "safari"))
     let space = UIBarButtonItem(systemItem: .flexibleSpace)
     
-    let topToolBar = UIToolbar()
+//    let topToolBar = UIToolbar()
+    let navigationBar = UINavigationBar()
     
     let updateButtonItem = UIBarButtonItem(systemItem: .refresh)
     
     let searchBar = {
-        let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 300, height: 40))
+        let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
         searchBar.searchBarStyle = .minimal
         
         return searchBar
     }()
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupBottomToolbar()
-        setupTopToolbar()
+//        setupTopToolbar()
+        setupNavigationBar()
         setupWebView()
         
         
@@ -53,7 +54,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         view.addSubview(webView)
         
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: topToolBar.bottomAnchor),
+            webView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             webView.bottomAnchor.constraint(equalTo: bottomToolbar.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
@@ -87,24 +88,32 @@ class ViewController: UIViewController, WKNavigationDelegate {
         
     }
     
-    //MARK: - Setup TopToolbar
+    //MARK: - Setup NavigationBar
     
-    func setupTopToolbar() {
+    func setupNavigationBar() {
         
-        topToolBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(topToolBar)
+        view.addSubview(navigationBar)
         
         NSLayoutConstraint.activate([
-            topToolBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            topToolBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            topToolBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            navigationBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            navigationBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
         
-        topToolBar.items = [space, UIBarButtonItem(customView: searchBar), space, updateButtonItem]
+        let navigationItem = UINavigationItem()
+        let searchView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
+        searchView.addSubview(searchBar)
+        
+        navigationItem.rightBarButtonItem = updateButtonItem
+        navigationItem.titleView = searchView
+        
+        navigationBar.items = [navigationItem]
+        
+       
         
         updateButtonItem.action = #selector(updateButtonItemTapped)
-        
     }
     
     //MARK: - Actions of the bottomToolbar buttons

@@ -21,10 +21,10 @@ class ViewController: UIViewController, WKNavigationDelegate {
     let safariButtonItem = UIBarButtonItem(image: UIImage(systemName: "safari"))
     let space = UIBarButtonItem(systemItem: .flexibleSpace)
     
-//    let topToolBar = UIToolbar()
     let navigationBar = UINavigationBar()
     
     let updateButtonItem = UIBarButtonItem(systemItem: .refresh)
+    let cancelUpdateButtonItem = UIBarButtonItem(image: UIImage(systemName: "multiply"))
     
     let searchBar = {
         let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
@@ -114,6 +114,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
        
         
         updateButtonItem.action = #selector(updateButtonItemTapped)
+        cancelUpdateButtonItem.action = #selector(cancelUpdateButtonItemTapped)
     }
     
     //MARK: - Actions of the bottomToolbar buttons
@@ -132,10 +133,14 @@ class ViewController: UIViewController, WKNavigationDelegate {
         UIApplication.shared.open(url)
     }
     
-    //MARK: - Action of the topToolbar button
+    //MARK: - Action of the NavigationBar button
     
     @objc func updateButtonItemTapped() {
         webView.reload()
+    }
+    
+    @objc func cancelUpdateButtonItemTapped() {
+        webView.stopLoading()
     }
 
     //MARK: - WKNavigationDelegate
@@ -143,10 +148,16 @@ class ViewController: UIViewController, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         backButtonItem.isEnabled = webView.canGoBack
         forwardButtonItem.isEnabled = webView.canGoForward
+        
+        navigationItem.rightBarButtonItem = updateButtonItem
+        navigationBar.items = [navigationItem]
+
     }
     
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         searchBar.text = webView.url?.absoluteString
+        navigationItem.rightBarButtonItem = cancelUpdateButtonItem
+        navigationBar.items = [navigationItem]
     }
 
 }

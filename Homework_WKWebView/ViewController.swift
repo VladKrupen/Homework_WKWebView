@@ -141,6 +141,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     
     @objc func cancelUpdateButtonItemTapped() {
         webView.stopLoading()
+        navigationBar.topItem?.rightBarButtonItem = updateButtonItem
     }
 
     //MARK: - WKNavigationDelegate
@@ -149,15 +150,15 @@ class ViewController: UIViewController, WKNavigationDelegate {
         backButtonItem.isEnabled = webView.canGoBack
         forwardButtonItem.isEnabled = webView.canGoForward
         
-        navigationItem.rightBarButtonItem = updateButtonItem
-        navigationBar.items = [navigationItem]
+        navigationBar.topItem?.rightBarButtonItem = updateButtonItem
+
 
     }
     
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         searchBar.text = webView.url?.absoluteString
-        navigationItem.rightBarButtonItem = cancelUpdateButtonItem
-        navigationBar.items = [navigationItem]
+        
+        navigationBar.topItem?.rightBarButtonItem = cancelUpdateButtonItem
     }
 
 }
